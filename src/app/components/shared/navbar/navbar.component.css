@@ -1,0 +1,16 @@
+nav {
+  background-color: rgba(0, 0, 0, 0.5) !important; }
+  nav .navbar-collapse {
+    margin-left: 10px; }
+  nav button.navbar-toggler {
+    border: none;
+    /*Disable focus click*/
+    outline: 0px; }
+  nav .navbar-brand {
+    padding-bottom: 0px; }
+    nav .navbar-brand .navbar-icon {
+      fill: white;
+      width: 32px;
+      margin-left: 10px; }
+
+/*# sourceMappingURL=navbar.component.css.map */
