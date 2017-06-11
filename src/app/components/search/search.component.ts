@@ -12,7 +12,10 @@ export class SearchComponent implements OnInit {
 
   ngOnInit() {
 
-    this.spotifyService.getArtists( "ed sheeran" )
+    /*this.spotifyService.getArtists( "ed sheeran" )
+      .subscribe();*/
+
+    this.spotifyService.getRequestAuthorization()
       .subscribe();
   }
 

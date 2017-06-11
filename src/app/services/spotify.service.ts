@@ -7,10 +7,25 @@ export class SpotifyService {
 
   artists:any [] = [];
 
-  API_SPOTIFY:string = "https://api.spotify.com/v1/";
-  urlSearch:string = "search";
+  API_SPOTIFY:string = 'https://api.spotify.com/v1/';
+  CLIENT_ID:string = 'your client id';
+  ACCOUNTS:string = 'https://accounts.spotify.com/';
+  REDIRECT_URI:string = 'http://localhost:4200/#/callback';
+  urlSearch:string = 'search';
+  urlAuthorize:string = 'authorize';
 
   constructor( private http:Http ) { }
+
+
+  getRequestAuthorization (){
+    let query = `?response_type=code&client_id=${this.CLIENT_ID}&redirect_uri=${encodeURIComponent(this.REDIRECT_URI)}`;
+    let url = this.ACCOUNTS + this.urlAuthorize + query;
+
+    return this.http.get(url)
+      .map( res => {
+        console.log(res);
+      });
+  }
 
   getArtists ( search:string ){
 
