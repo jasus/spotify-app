@@ -1,14 +1,16 @@
 import { RouterModule, Routes } from '@angular/router';
+import { AuthGuard } from "./guards/auth.guard";
 
-import { HomeComponent } from "./components/home/home.component";
-import { SearchComponent } from "./components/search/search.component";
+import { LoginComponent, HomeComponent, SearchComponent  } from "./components/components";
+
 
 
 const APP_ROUTES: Routes = [
-  { path: 'home', component: HomeComponent },
-  { path: 'search', component: SearchComponent },
+  { path: 'home', component: HomeComponent, canActivate:[AuthGuard] },
+  { path: 'search', component: SearchComponent, canActivate:[AuthGuard] },
+  { path: 'login', component: LoginComponent },
   { path: '**', pathMatch: 'full', redirectTo: 'home' }
 ];
 
 
-export const APP_ROUTING = RouterModule.forRoot(APP_ROUTES, { useHash: true });
+export const APP_ROUTING = RouterModule.forRoot(APP_ROUTES, { useHash: false });

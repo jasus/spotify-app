@@ -7,18 +7,20 @@ import { APP_ROUTING } from './app.routes';
 //SERVICES
 import { SpotifyService } from './services/spotify.service';
 
+//PROVIDERS
+import { AuthGuard } from "./guards/auth.guard";
+
 //COMPONENTS
 import { AppComponent } from './app.component';
-import { HomeComponent } from './components/home/home.component';
-import { SearchComponent } from './components/search/search.component';
-import { NavbarComponent } from './components/shared/navbar/navbar.component';
+import { NavbarComponent, HomeComponent, SearchComponent, LoginComponent } from './components/components';
 
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
     SearchComponent,
-    NavbarComponent
+    NavbarComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule,
@@ -26,6 +28,7 @@ import { NavbarComponent } from './components/shared/navbar/navbar.component';
     APP_ROUTING
   ],
   providers: [
+    AuthGuard,
     SpotifyService
   ],
   bootstrap: [AppComponent]
