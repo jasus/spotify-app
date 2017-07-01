@@ -29,7 +29,17 @@ import { NavbarComponent, HomeComponent, SearchComponent, LoginComponent } from 
   ],
   providers: [
     AuthGuard,
-    SpotifyService
+    SpotifyService,{
+      provide: "SpotifyConfig" ,
+      useValue: {
+        clientId: 'your client id',
+        clientSecret: '',
+        redirectUri: 'http://localhost:4200/assets/oauthcallback.html',
+        scope: '',
+        apiBase: 'https://api.spotify.com/v1',
+        apiAccounts: 'https://accounts.spotify.com'
+      }
+    }
   ],
   bootstrap: [AppComponent]
 })

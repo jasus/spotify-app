@@ -1,39 +1,93 @@
 import { Injectable} from '@angular/core';
-import { Http } from '@angular/http';
+import { Headers, Http, Request } from '@angular/http';
 import 'rxjs/add/operator/map';
+
+export interface SpotifyConfig {
+  clientId: string,
+  clientSecret: string,
+  redirectUri: string,
+  scope: string,
+  authToken?: string,
+  apiBase: string,
+  apiAccounts: string,
+}
+
+interface HttpRequestOptions {
+  method?: string,
+  url: string,
+  search?: Object,
+  body?: Object,
+  headers?: Headers,
+}
 
 @Injectable()
 export class SpotifyService {
 
   artists:any [] = [];
 
-  API_SPOTIFY:string = 'https://api.spotify.com/v1/';
-  CLIENT_ID:string = 'your client id';
-  ACCOUNTS:string = 'https://accounts.spotify.com/';
-  REDIRECT_URI:string = 'http://localhost:4200/assets/oauthcallback.html';
-  urlSearch:string = 'search';
-  urlAuthorize:string = 'authorize';
-
-  constructor( private http:Http ) { }
+  constructor( private http:Http, private config:SpotifyConfig) { }
 
   getRequestAuthorization (){
 
-      let query = `?response_type=code&client_id=${this.CLIENT_ID}&redirect_uri=${encodeURIComponent(this.REDIRECT_URI)}`;
-      let url = this.ACCOUNTS + this.urlAuthorize + query;
-      window.open(url, '_blank', 'location=no');
+    let query = `?response_type=code&client_id=${this.config.clientId}&redirect_uri=${encodeURIComponent(this.config.redirectUri)}`;
+    let url = this.config.apiAccounts + '/authorize/' + query;
+    window.open(url, '_blank', 'location=no');
 
   }
 
-  getArtists ( search:string ){
+  getToken ( authorizationCode:string ){
 
-    let query = `?q=${ search }&type=artist`;
-    let url = this.API_SPOTIFY + this.urlSearch + query;
+    let header:Headers = new Headers();
+    this.createAuthorizationHeader(header);
 
-    return this.http.get( url )
-      .map( res => {
-        console.log(res.json());
-      });
+    return this.api({
+      method: 'POST',
+      url: '/api/token',
+      body: this.toQueryString({
+        grant_type: 'authorization_code',
+        code: authorizationCode,
+        redirect_uri: this.config.redirectUri
+      }),
+      headers: header
+    }).map(res => res.json());
 
+  }
+
+  getArtists ( artists: string | Array<string> ){
+
+    return this.api({
+      method: 'GET',
+      url: '/artists/',
+      search: { ids: artists.toString() }
+    }).map(res => res.json());
+
+  }
+
+  private createAuthorizationHeader(headers: Headers) {
+    headers.append('Authorization', 'Basic ' +
+      btoa(`${this.config.clientId}:${this.config.clientSecret}`));
+  }
+
+
+  private toQueryString(obj: Object): string {
+    var parts = [];
+    for (let key in obj) {
+      if (obj.hasOwnProperty(key)) {
+        parts.push(encodeURIComponent(key) + '=' + encodeURIComponent(obj[key]));
+      }
+    };
+    return parts.join('&');
+  };
+
+
+  private api(requestOptions: HttpRequestOptions) {
+    return this.http.request(new Request({
+      url: this.config.apiBase + requestOptions.url,
+      method: requestOptions.method || 'GET',
+      search: this.toQueryString(requestOptions.search),
+      body: JSON.stringify(requestOptions.body),
+      headers: requestOptions.headers
+    }));
   }
 
 }

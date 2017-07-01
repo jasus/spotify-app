@@ -1,6 +1,7 @@
 import {Component, NgZone, OnInit} from '@angular/core';
 import {SpotifyService} from "../../services/spotify.service";
 import {Router} from "@angular/router";
+import {URLSearchParams} from "@angular/http";
 
 @Component({
   selector: 'app-login',
@@ -18,10 +19,29 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit() {
+
+    if(sessionStorage.getItem('currentUser')){
+      this.router.navigate(['/home']);
+    }
   }
 
   private login(){
     this.spotifyService.getRequestAuthorization();
+  }
+
+  private getAPIToken( authorizationCode:string ){
+    this.spotifyService.getToken(authorizationCode)
+      .subscribe(res => {
+
+        sessionStorage.setItem('currentUser', JSON.stringify({token: res.token}));
+        this.router.navigate(['/home']);
+
+
+      }, error => {
+
+      });
+
+
   }
 
 
@@ -32,8 +52,20 @@ export class LoginComponent implements OnInit {
   private oauthCallback(url){
     console.log(url);
 
-    sessionStorage.setItem('currentUser', url);
-    this.router.navigate(['/home']);
+    let urlParams = new URLSearchParams(url);
+
+    if (urlParams.has('code')) {
+
+      this.getAPIToken(urlParams.get('code'));
+
+    }else if (urlParams.has('error')){
+
+      let error = urlParams.get('error');
+      console.log(error);
+      alert(error);
+
+    }
+
   }
 
 }
