@@ -38,7 +38,7 @@ export class LoginComponent implements OnInit {
 
 
       }, error => {
-
+        console.log(error);
       });
 
 
@@ -52,11 +52,12 @@ export class LoginComponent implements OnInit {
   private oauthCallback(url){
     console.log(url);
 
-    let urlParams = new URLSearchParams(url);
+    let urlOauth = new URL(url);
+    let urlParams = new URLSearchParams(urlOauth.search);
 
-    if (urlParams.has('code')) {
+    if (urlParams.has('?code')) {
 
-      this.getAPIToken(urlParams.get('code'));
+      this.getAPIToken(urlParams.get('?code'));
 
     }else if (urlParams.has('error')){
 

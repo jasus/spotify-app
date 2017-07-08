@@ -1,4 +1,4 @@
-import { Injectable} from '@angular/core';
+import { Injectable, Inject } from '@angular/core';
 import { Headers, Http, Request } from '@angular/http';
 import 'rxjs/add/operator/map';
 
@@ -25,7 +25,7 @@ export class SpotifyService {
 
   artists:any [] = [];
 
-  constructor( private http:Http, private config:SpotifyConfig) { }
+  constructor( @Inject("SpotifyConfig") private config:SpotifyConfig, private http:Http) { }
 
   getRequestAuthorization (){
 
