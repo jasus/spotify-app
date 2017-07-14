@@ -40,7 +40,7 @@ export class SpotifyService {
     let header:Headers = new Headers();
     this.createAuthorizationHeader(header);
 
-    return this.api({
+    return this.apiAccounts({
       method: 'POST',
       url: '/api/token',
       body: this.toQueryString({
@@ -66,6 +66,7 @@ export class SpotifyService {
   private createAuthorizationHeader(headers: Headers) {
     headers.append('Authorization', 'Basic ' +
       btoa(`${this.config.clientId}:${this.config.clientSecret}`));
+    headers.append('Content-Type', 'application/x-www-form-urlencoded');
   }
 
 
@@ -86,6 +87,16 @@ export class SpotifyService {
       method: requestOptions.method || 'GET',
       search: this.toQueryString(requestOptions.search),
       body: JSON.stringify(requestOptions.body),
+      headers: requestOptions.headers
+    }));
+  }
+
+  private apiAccounts(requestOptions: HttpRequestOptions){
+    return this.http.request(new Request({
+      url: this.config.apiAccounts + requestOptions.url,
+      method: requestOptions.method || 'GET',
+      search: this.toQueryString(requestOptions.search),
+      body: requestOptions.body,
       headers: requestOptions.headers
     }));
   }

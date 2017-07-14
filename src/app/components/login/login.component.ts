@@ -33,7 +33,7 @@ export class LoginComponent implements OnInit {
     this.spotifyService.getToken(authorizationCode)
       .subscribe(res => {
 
-        sessionStorage.setItem('currentUser', JSON.stringify({token: res.token}));
+        sessionStorage.setItem('authorization', res);
         this.router.navigate(['/home']);
 
 
