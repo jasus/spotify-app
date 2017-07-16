@@ -27,6 +27,8 @@ export class SpotifyService {
 
   constructor( @Inject("SpotifyConfig") private config:SpotifyConfig, private http:Http) { }
 
+  // USERS AND TOKEN API CALLS
+
   getRequestAuthorization (){
 
     let query = `?response_type=code&client_id=${this.config.clientId}&redirect_uri=${encodeURIComponent(this.config.redirectUri)}`;
@@ -53,14 +55,31 @@ export class SpotifyService {
 
   }
 
-  getArtists ( artists: string | Array<string> ){
+  getRefreshToken ( refreshToken:string ){
+    let header:Headers = new Headers();
+    this.createAuthorizationHeader(header);
+
+    return this.apiAccounts({
+      method: 'POST',
+      url: '/api/token',
+      body: this.toQueryString({
+        grant_type: 'refresh_token',
+        refresh_token: refreshToken
+      }),
+      headers: header
+    }).map(res => res.json());
+  }
+
+  getUser ( ){
+    let header:Headers = new Headers();
+    this.createAuthorizationHeader(header);
 
     return this.api({
       method: 'GET',
-      url: '/artists/',
-      search: { ids: artists.toString() }
+      url: '/me',
+      body: this.toQueryString({ }),
+      headers: header
     }).map(res => res.json());
-
   }
 
   private createAuthorizationHeader(headers: Headers) {
@@ -99,6 +118,18 @@ export class SpotifyService {
       body: requestOptions.body,
       headers: requestOptions.headers
     }));
+  }
+
+  // API CALLS
+
+  getArtists ( artists: string | Array<string> ){
+
+    return this.api({
+      method: 'GET',
+      url: '/artists/',
+      search: { ids: artists.toString() }
+    }).map(res => res.json());
+
   }
 
 }
