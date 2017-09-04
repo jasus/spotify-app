@@ -32,8 +32,8 @@ import { NavbarComponent, HomeComponent, SearchComponent, LoginComponent } from 
     SpotifyService,{
       provide: "SpotifyConfig" ,
       useValue: {
-        clientId: 'your client id',
-        clientSecret: '',
+        clientId: '9c76edd8e0364697a131d88a6d61f547',
+        clientSecret: '79a9cfcd50fb4e9aad0bf6ea3877ba9c',
         redirectUri: 'http://localhost:4200/assets/oauthcallback.html',
         scope: '',
         apiBase: 'https://api.spotify.com/v1',

@@ -59,16 +59,14 @@ body{
   //background: linear-gradient(rgb(49, 103, 57), rgb(4, 10, 5) 85%);
 
   //background: linear-gradient(to right, rgb(214,69,129) 0%, rgb(214,69,129) 33%, rgb(136,41,202) 100%);
+  background: linear-gradient(180deg, #2d4258 20%, #162b43 60%, #010203 100%);
 
   color: white !important;
+  //background-color: black;
   background-repeat: no-repeat;
   background-attachment: fixed;
 
   font-family: "Circular Std Medium", "Helvetica";
-}
-
-hr{
-  border-color: white;
 }
 
 .jumbotron{
