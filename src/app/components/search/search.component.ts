@@ -17,6 +17,8 @@ export class SearchComponent implements OnInit {
     /*this.spotifyService.getArtists( "ed sheeran" )
       .subscribe();*/
 
+      document.getElementById("input-text").focus();
+
   }
 
 }
